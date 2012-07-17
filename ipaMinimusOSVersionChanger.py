@@ -31,7 +31,7 @@ def extractFile(ipaFileName, errors):
 			return plFileName
 
 
-def buildDataTree(plFileName, errors):
+def buildDataTree(plFileName, xml, errors):
 	with open(plFileName, 'rb') as plFile:
 		binData = plFile.read()
 
@@ -48,7 +48,7 @@ def buildDataTree(plFileName, errors):
 	return dataTree
 
 
-def changeValueInFile(dataTree, plFileName, errors):
+def changeValueInFile(dataTree, plFileName, xml, errors):
 	print 'Current OS version requirement: %s' % dataTree['MinimumOSVersion'].get_value()
 
 	osVersion = raw_input('Enter new OS Version requirement or leave blank to prevent changes:')
@@ -84,17 +84,17 @@ def saveAndRemoveTemp(plFileName, ipaFileName, errors):
 
 def Do(name, errors):
 	xml = True
-	ipaFileName = ''
+	ipaFileName = sys.argv[1]
 
-	plFileName = extractFile(sys.argv[1], errors)
+	plFileName = extractFile(ipaFileName, errors)
 
 	if not len(errors):
-		dataTree = buildDataTree(plFileName, errors)
+		dataTree = buildDataTree(plFileName, xml, errors)
 	else:
 		return None
 
 	if not len(errors):
-		changeValueInFile(dataTree, plFileName, errors)
+		changeValueInFile(dataTree, plFileName, xml, errors)
 	else:
 		return None
 
